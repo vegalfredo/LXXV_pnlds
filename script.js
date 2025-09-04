@@ -1,15 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos del menú móvil
     const menuToggle = document.querySelector('.menu-toggle');
+    const closeMenu = document.querySelector('.close-menu');
     const mainNav = document.querySelector('.main-nav');
     const navLinks = document.querySelectorAll('nav a[href^="#"]');
 
+    console.log('Elementos encontrados:', { menuToggle, closeMenu, mainNav, navLinks });
+
+    // Función para abrir menú
+    function openMenu() {
+        console.log('Abriendo menú...');
+        mainNav.classList.add('nav-open');
+        menuToggle.classList.add('menu-open');
+        document.body.classList.add('menu-open');
+        console.log('Clases aplicadas:', mainNav.className);
+    }
+
+    // Función para cerrar menú
+    function closeMenuFunc() {
+        console.log('Cerrando menú...');
+        mainNav.classList.remove('nav-open');
+        menuToggle.classList.remove('menu-open');
+        document.body.classList.remove('menu-open');
+    }
+
     // Toggle del menú hamburguesa
-    menuToggle.addEventListener('click', () => {
-        mainNav.classList.toggle('nav-open');
-        menuToggle.classList.toggle('menu-open');
-        document.body.classList.toggle('menu-open');
-    });
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Click en hamburguesa');
+            openMenu();
+        });
+    }
+
+    // Cerrar menú con botón X
+    if (closeMenu) {
+        closeMenu.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Click en cerrar');
+            closeMenuFunc();
+        });
+    }
 
     // Cerrar menú al hacer clic en un enlace (móviles)
     navLinks.forEach(link => {
@@ -18,9 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             // Cierra el menú móvil si está abierto
-            mainNav.classList.remove('nav-open');
-            menuToggle.classList.remove('menu-open');
-            document.body.classList.remove('menu-open');
+            closeMenuFunc();
 
             // Obtiene el ID del objetivo desde el atributo href del enlace
             const targetId = this.getAttribute('href');
@@ -39,18 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cerrar menú al hacer clic fuera de él
     document.addEventListener('click', (e) => {
         if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
-            mainNav.classList.remove('nav-open');
-            menuToggle.classList.remove('menu-open');
-            document.body.classList.remove('menu-open');
+            closeMenuFunc();
         }
     });
 
     // Cerrar menú al redimensionar la ventana (si se cambia a desktop)
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768) {
-            mainNav.classList.remove('nav-open');
-            menuToggle.classList.remove('menu-open');
-            document.body.classList.remove('menu-open');
+            closeMenuFunc();
         }
     });
 });
